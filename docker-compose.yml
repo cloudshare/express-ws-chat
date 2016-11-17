@@ -1,7 +1,6 @@
 web:
     build: node-server/
-    ports:
-        - 3000:3000
+
 proxy:
     build: chat-proxy/
     ports:

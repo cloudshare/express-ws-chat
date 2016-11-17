@@ -9,14 +9,14 @@ app.get('/', function(req, res, next){
 
 var rooms = {};
 app.ws('/room/:room', function(ws, req) {
+    var room_name = req.params.room;
+    if (!(room_name in rooms)) {
+        console.log("New room being opened", room_name);
+        rooms[room_name] = new Set([ws]);
+    } else {
+        rooms[room_name].add(ws);
+    }
     ws.on('message', function(msg) {
-        var room_name = req.params.room;
-        if (!(room_name in rooms)) {
-            console.log("New room being opened", room_name);
-            rooms[room_name] = new Set([ws]);
-        } else {
-            rooms[room_name].add(ws);
-        }
 
         var user = 'anonymous';
         try {
@@ -34,7 +34,9 @@ app.ws('/room/:room', function(ws, req) {
         connections.forEach(function(w) {
             if (w) {
                 try {
-                    w.send(user + ": " + msg);
+                    if (w != ws) {
+                        w.send(user + ": " + msg);
+                    }
                 } catch (e) {
                     connections.delete(w);
                 }
