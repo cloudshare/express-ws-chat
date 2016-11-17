@@ -2,8 +2,8 @@ var express = require('express');
 var app = express();
 var expressWs = require('express-ws')(app);
  
-app.get('/', function(req, res, next){
-    res.send("Welcome to express-ws chat!");
+app.get('/api', function(req, res, next){
+    res.send("Welcome to express-ws chat API!");
 	next();
 });
 
@@ -16,6 +16,8 @@ app.ws('/room/:room', function(ws, req) {
     } else {
         rooms[room_name].add(ws);
     }
+    ws.send(JSON.stringify({ user: "Room", message: "Welcome to chat room " + room_name}));
+
     ws.on('message', function(msg) {
 
         var user = 'anonymous';
@@ -35,7 +37,7 @@ app.ws('/room/:room', function(ws, req) {
             if (w) {
                 try {
                     if (w != ws) {
-                        w.send(user + ": " + msg);
+                        w.send(JSON.stringify({ user: user, message: msg}));
                     }
                 } catch (e) {
                     connections.delete(w);
