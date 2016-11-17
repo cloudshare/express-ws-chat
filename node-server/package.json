@@ -1,0 +1,23 @@
+{
+  "name": "express-ws-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudshare/express-ws-chat.git"
+  },
+  "author": "CloudShare",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cloudshare/express-ws-chat/issues"
+  },
+  "homepage": "https://github.com/cloudshare/express-ws-chat#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-ws": "^2.0.0"
+  }
+}
