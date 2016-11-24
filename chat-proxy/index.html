@@ -305,7 +305,7 @@ body {
                 message.draw();
                 return $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
             };
-            var webSocket = $.simpleWebSocket({ url: 'ws://docker/room/237' });
+            var webSocket = $.simpleWebSocket({ url: 'ws://' + location.hostname + '/room/237' });
             
             // reconnected listening
             webSocket.listen(function(message) {
