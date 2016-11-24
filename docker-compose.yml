@@ -1,9 +1,22 @@
-web:
-    build: node-server/
+version: '2'
 
-proxy:
-    build: chat-proxy/
-    ports:
-        - 80:80
-    links:
-        - web
+services:
+    web:
+        build: node-server/
+        volumes_from:
+            - filebeat
+
+    proxy:
+        build: chat-proxy/
+        ports:
+            - 80:80
+        depends_on:
+            - "web"
+        volumes_from:
+            - filebeat
+
+    filebeat:
+        build: filebeat/
+        volumes:
+            - /var/log/chat/
+            - /var/log/nginx/

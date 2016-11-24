@@ -1,0 +1,9 @@
+filebeat:
+    prospectors:
+        - input_type: log
+          paths:
+              - /var/log/chat/*.log
+
+output:
+    console:
+        pretty: true
