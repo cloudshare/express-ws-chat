@@ -5,6 +5,8 @@ services:
         build: node-server/
         volumes_from:
             - filebeat
+        networks:
+            - backend
 
     proxy:
         build: chat-proxy/
@@ -14,9 +16,17 @@ services:
             - "web"
         volumes_from:
             - filebeat
+        networks:
+            - backend
 
     filebeat:
         build: filebeat/
         volumes:
             - /var/log/chat/
             - /var/log/nginx/
+            - /var/log/mybeat/
+        networks:
+            - backend
+
+networks:
+    backend:
