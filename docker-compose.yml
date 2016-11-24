@@ -27,6 +27,8 @@ services:
             - /var/log/mybeat/
         networks:
             - backend
+        environment:
+            LOGSTASH_HOST:
 
 networks:
     backend:
