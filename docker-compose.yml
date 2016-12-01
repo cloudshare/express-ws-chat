@@ -7,6 +7,7 @@ services:
             - chat_logs:/var/log/chat/
         networks:
             - backend
+        restart: always
 
     proxy:
         build: chat-proxy/
@@ -18,6 +19,7 @@ services:
             - nginx_logs:/var/log/nginx/
         networks:
             - backend
+        restart: always
 
     filebeat:
         build: filebeat/
@@ -29,6 +31,7 @@ services:
             - backend
         environment:
             LOGSTASH_HOST:
+        restart: always
 
 volumes:
     chat_logs:
