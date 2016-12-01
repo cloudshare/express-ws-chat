@@ -3,8 +3,8 @@ version: '2'
 services:
     web:
         build: node-server/
-        volumes_from:
-            - filebeat
+        volumes:
+            - chat_logs:/var/log/chat/
         networks:
             - backend
 
@@ -14,21 +14,26 @@ services:
             - 80:80
         depends_on:
             - "web"
-        volumes_from:
-            - filebeat
+        volumes:
+            - nginx_logs:/var/log/nginx/
         networks:
             - backend
 
     filebeat:
         build: filebeat/
         volumes:
-            - /var/log/chat/
-            - /var/log/nginx/
-            - /var/log/mybeat/
+            - chat_logs:/var/log/chat/
+            - nginx_logs:/var/log/nginx/
+            - filebeat_logs:/var/log/mybeat/
         networks:
             - backend
         environment:
             LOGSTASH_HOST:
+
+volumes:
+    chat_logs:
+    nginx_logs:
+    filebeat_logs:
 
 networks:
     backend:
