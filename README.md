@@ -11,36 +11,29 @@ or simply **[launch this demo instantly on CloudShare](http://cloudshare.com/pri
 git clone https://github.com/cloudshare/express-ws-chat.git
 cd express-ws-chat
 docker-compose build
-docker-compose up
+docker-compose -p chat up
 ```
 
 # What's in the box
 
 ```
-                                                 
-    ┌────────────┐                               
-    │  Nginx:80  │                               
-    │  (docker)  │                               
-    └────────────┘                               
-           │                                     
-           │                                     
-           ├─────────────────────────┐           
-           │                         │           
-           │                         │           
-           │                         │           
-       REST API                  /static/*       
-           +                         │           
-       WebSocket                     │           
-           │                         │           
-           │                         │           
-           │                         │           
-           │                         │           
-           ▼                         ▼           
-  ┌────────────────┐     ┌──────────────────────┐
-  │  Node.js:3000  │     │     static files     │
-  │    (docker)    │     │    (html/css/js)     │
-  └────────────────┘     │     served from      │
-                         │   /opt/chat/static   │
-                         └──────────────────────┘
+    ┌──────────┐                               
+    │ Nginx:80 │                               
+    │ (docker) │                               
+    └──────────┘                               
+         │                                     
+         ├─────────────────────────┐           
+         │                         │           
+     REST API                  /static/*       
+         +                         │           
+     WebSocket                     │           
+         │                         │           
+         ▼                         ▼           
+┌────────────────┐     ┌──────────────────────┐
+│  Node.js:3000  │     │     static files     │
+│    (docker)    │     │    (html/css/js)     │
+└────────────────┘     │     served from      │
+                       │   /opt/chat/static   │
+                       └──────────────────────┘
 ```
 

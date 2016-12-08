@@ -5,8 +5,6 @@ filebeat:
               - /var/log/chat/*.log
 
 output:
-    console:
-        pretty: true
     logstash:
         hosts: ["${LOGSTASH_HOST:logstash}:5044"]
         index: filebeat
