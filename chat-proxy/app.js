@@ -1,4 +1,5 @@
 (function () {
+    var ROOM = "237";
     var Message;
     Message = function (arg) {
         this.text = arg.text, this.message_side = arg.message_side, this.sender = arg.username;
@@ -17,6 +18,31 @@
         }(this);
         return this;
     };
+
+    var displayMessage = function(text, left, sender ) {
+        var $messages, message;
+        if (text.trim() === '') {
+            return;
+        }
+        $('#message_input').val('');
+        $messages = $('.messages');
+        message_side = left ? 'left' : 'right';
+        message = new Message({
+            text: text,
+            message_side: message_side,
+            username: sender
+        });
+        message.draw();
+        return $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
+    };
+
+    var on_history = function(response) {
+        response.messages.forEach(function(msg) {
+            displayMessage(msg.msg, true, msg.user);
+        });
+        console.log("history response", response);
+    }
+
     $(function () {
         $(".chat_window").hide();
         getAlias = function () {
@@ -32,49 +58,34 @@
             }
         });
 
+
         var enter = function(user) {
             $(".alias_window").hide();
             $(".chat_window").show();
             $("#message_input").focus();
 
-            var getMessageText, message_side, displayMessage;
-            message_side = 'right';
             getMessageText = function () {
                 var $message_input;
                 $message_input = $('#message_input');
                 return $message_input.val();
             };
 
-            displayMessage = function (text, left, sender ) {
-                var $messages, message;
-                if (text.trim() === '') {
-                    return;
-                }
-                $('#message_input').val('');
-                $messages = $('.messages');
-                message_side = left ? 'left' : 'right';
-                message = new Message({
-                    text: text,
-                    message_side: message_side,
-                    username: sender
-                });
-                message.draw();
-                return $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
-            };
-            var webSocket = $.simpleWebSocket({ url: 'ws://' + location.hostname + '/room/237' });
+            var webSocket = $.simpleWebSocket({ url: 'ws://' + location.hostname + '/room/' + ROOM });
 
+            send = function(msg) {
+                webSocket.send({ user: user, message: msg});
+            }
             // reconnected listening
             webSocket.listen(function(message) {
                 if (message.message == "_whois_") {
-                    send("_announce_");
+                    $.get("/api/history/" + ROOM)
+                        .done(on_history)
+                        .always(function() { send("_announce_"); });
                 } else {
                     displayMessage(message.message, true, message.user);
                 }
             });
-             
-            send = function(msg) {
-                webSocket.send({ user: user, message: msg});
-            }
+
 
             say = function(msg) {
                 if (!msg) {
@@ -94,6 +105,6 @@
             });
         };
 
-        
+
     });
 }.call(this));

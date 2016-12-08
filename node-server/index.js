@@ -54,7 +54,7 @@ app.get('/api/history/:room', function(req, res){
     var room = req.params.room;
     fetch_room_history(room, function(hits) {
         res.setHeader('Content-Type', 'application/json');
-        var history = hits.hits.map(function(hit) {
+        var history = hits.hits.reverse().map(function(hit) {
             var s = hit._source;
             return { msg: s.message, time: s.sent, user: s.user };
         });
