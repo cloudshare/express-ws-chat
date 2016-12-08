@@ -5,8 +5,13 @@ services:
         build: node-server/
         volumes:
             - chat_logs:/var/log/chat/
+        ports:
+            - 3000:3000
         networks:
             - backend
+        environment:
+            ES_HOST:
+            DEBUG:
         restart: always
 
     proxy:
