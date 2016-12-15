@@ -10,6 +10,8 @@ or simply **[launch this demo instantly on CloudShare](http://cloudshare.com/pri
 ```
 git clone https://github.com/cloudshare/express-ws-chat.git
 cd express-ws-chat
+# optionally: export LOGSTASH_HOST=[host name of Logstash]
+# optionally: export ES_HOST=[host name of elasticsearch host]
 docker-compose build
 docker-compose -p chat up
 ```
@@ -56,19 +58,15 @@ docker-compose -p chat up
 
 Nginx listens on port 80 and does two things. It serves static files (copied into its docker image) and acts as a proxy for Node.js.
 
-The front-end source can be found in `chat-proxy/`.
-
-### Chat rooms
-
-This chat demo can host any number of chat rooms, but for simplicity the UI uses a fixed chat room name (room `237`). Adding support for switching rooms is a nice exercise, if you want to play around with this demo. All you need to do is change the WebSocket URL's room name part (see below) and add the relevant UI.
-
 ## Node.js
 
-Node.js runs our chat server (see `app.js`). It listens for chat messages on `/room/[room number]` and broadcasts them to all connected users.
+Node.js runs our chat server (see `index.js`). It listens for chat messages on `/room/[room number]` and broadcasts them to all connected users.
 
 It also listens for REST API calls on `/api/...`.
 
 Its docker-compose name is `web`. It outputs log records using Bunyan in JSON format. The log files are written to the `chat_logs` volume (see `docker-compose.yml`).
+
+The server expects `ES_HOME` to hold the ElasticSearch hostname, which it uses to query for chat history.
 
 ## FileBeat
 
